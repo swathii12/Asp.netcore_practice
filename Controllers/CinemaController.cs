@@ -1,11 +1,14 @@
 ﻿using Asp.netcore_practice.Services;
 using Asp.netcore_practice.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Asp.netcore_practice.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class CinemaController:ControllerBase
     {
         private readonly ICinemaService _service;
@@ -16,6 +19,7 @@ namespace Asp.netcore_practice.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public IActionResult GetById(int id)
         {
             var response = _service.GetById(id);
@@ -26,7 +30,7 @@ namespace Asp.netcore_practice.Controllers
         public IActionResult AddCinema(CinemaViewModel cinema)
         {
             _service.AddCinema(cinema);
-            return Ok();
+            return Ok(cinema);
         }
 
         [HttpDelete("{id:int}")]
@@ -36,6 +40,7 @@ namespace Asp.netcore_practice.Controllers
             return NoContent();
         }
 
+        
         [HttpPut("{id:int}")]
 
         public IActionResult Update(int id, CinemaViewModel cinema)
@@ -45,6 +50,7 @@ namespace Asp.netcore_practice.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var getAll = _service.GetAllCinemas();

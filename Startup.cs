@@ -1,11 +1,12 @@
-﻿//using Asp.netcore_practice.Cart;
-using Asp.netcore_practice.Context;
+﻿using Asp.netcore_practice.Context;
 using Asp.netcore_practice.Models;
 using Asp.netcore_practice.Services;
 using Asp.netcore_practice.ViewModels;
 using Microsoft.AspNetCore.Cors.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 
 namespace Asp.netcore_practice
 {
@@ -32,15 +33,26 @@ namespace Asp.netcore_practice
             services.AddScoped<IProducerService, ProducerService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<IOrderActionService, OrderActionService>();
-           services.AddScoped<IOrdersService, OrdersService>();
+            services.AddScoped<IOrdersService, OrdersService>();
             services.AddTransient<ShoppingCartViewModel>();
             services.AddTransient<ShoppingCart>();
+           
+
+
+            //Authentication and Authorization
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders(); 
+
+           
+            services.AddMemoryCache();
+            services.AddAuthentication();
 
 
 
-            //services.AddSession();
-
-            services.AddControllers();
+            services.AddControllers().
+                AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); ;
 
             services.AddSwaggerGen();
         }
@@ -53,8 +65,7 @@ namespace Asp.netcore_practice
                 app.UseDeveloperExceptionPage();
             }
 
-            /*app.UseHttpsRedirection();
-            app.UseStaticFiles();*/
+          
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -65,9 +76,11 @@ namespace Asp.netcore_practice
             
 
             app.UseRouting();
-            //app.UseSession();
 
-            //app.UseAuthorization();
+
+            //Authentication and Authorization
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

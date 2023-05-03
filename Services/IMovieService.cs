@@ -7,14 +7,14 @@ namespace Asp.netcore_practice.Services
     {
         void Add(MovieViewModel movie);
 
-        List<Movie> GetAll();
+        List<MovieViewModel> GetAll();
 
         
         MovieGetByIdViewModel GetById(int id);
 
         void Delete(int id);
 
-        Movie Update(int id,MovieViewModel movie);
+        MovieViewModel Update(int id,MovieViewModel movie);
         Movie GetMovie(int id);
 
     }

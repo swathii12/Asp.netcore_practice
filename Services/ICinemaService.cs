@@ -8,10 +8,10 @@ namespace Asp.netcore_practice.Services
         CinemaGetByIdViewModel GetById(int id);
         void AddCinema(CinemaViewModel cinema);
 
-        List<Cinema> GetAllCinemas();
+        List<CinemaViewModel> GetAllCinemas();
 
         void Delete(int id);
 
-        Cinema Update(int id, CinemaViewModel actor);
+        CinemaViewModel Update(int id, CinemaViewModel actor);
     }
 }

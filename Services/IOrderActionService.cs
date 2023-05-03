@@ -5,11 +5,11 @@ namespace Asp.netcore_practice.Services
 {
     public interface IOrderActionService
     {
-         Movie AddToShoppingCart(int id);
-         ShoppingCartViewModel ShoppingCart();
+        Movie AddToShoppingCart(AddMovieViewModel model);
+        ShoppingCartViewModel ShoppingCart(int shoppingCartId);
 
-        void AddShoppingCart(ShoppingViewModel model);
+        void AddShoppingCart();
 
-        void RemoveFromShoppingCart(int id);
+        public void RemoveFromShoppingCart(AddMovieViewModel model);
     }
 }

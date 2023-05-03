@@ -1,5 +1,7 @@
 ﻿using Asp.netcore_practice.Context;
 using Asp.netcore_practice.Models;
+using Asp.netcore_practice.ViewModels;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace Asp.netcore_practice.Services
@@ -7,15 +9,24 @@ namespace Asp.netcore_practice.Services
     public class OrdersService : IOrdersService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public OrdersService(AppDbContext context)
+
+        public OrdersService(AppDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public List<Order> GetOrdersByUserId(string userId)
+        public List<Order> GetOrdersByUserIdAndRole(string userId, string UserRole)
         {
-            var orders = _context.Orders.Include(n => n.Items).ThenInclude(n => n.movie).Where(n => n.UserId == userId).ToList();
+            var orders = _context.Orders.Include(n => n.Items).ThenInclude(n => n.movie).Include(n=>n.User).ToList();
+
+            if (UserRole != "Admin")
+            {
+                orders = orders.Where(n => n.UserId == userId).ToList();
+            }
+
             return orders;
         }
 

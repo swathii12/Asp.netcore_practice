@@ -1,4 +1,5 @@
 ﻿using Asp.netcore_practice.Context;
+using Asp.netcore_practice.Controllers;
 using Asp.netcore_practice.Migrations;
 using Asp.netcore_practice.Models;
 using Asp.netcore_practice.ViewModels;
@@ -12,6 +13,7 @@ namespace Asp.netcore_practice.Services
         private readonly AppDbContext _context;
         private readonly ShoppingCart _shoppingCart;
         private readonly IMapper _mapper;
+        private readonly OrderController _controller;
 
         
         
@@ -20,43 +22,48 @@ namespace Asp.netcore_practice.Services
             _context = context;
             _shoppingCart = shoppingCart;
             _mapper = mapper;
+            
         }
 
         
 
-        public void AddItem(Movie movie)
+        public void AddItem(Movie movie, int shoppingCartId)
         {
-            _shoppingCart.ShoppingCartId = 1;
-            var shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.MovieId == movie.MovieId && n.ShoppingCartId == _shoppingCart.ShoppingCartId);
-            //var efg = _mapper.Map<ShoppingCartItem, ShoppingCartItemViewModel>(shoppingCartItem);
+           var id= _shoppingCart.ShoppingCartId = shoppingCartId;
 
-            if (shoppingCartItem == null)
-            {
+                
+                var shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.MovieId == movie.MovieId && n.ShoppingCartId == id);
 
 
-                shoppingCartItem = new ShoppingCartItem()
+                if (shoppingCartItem == null)
                 {
-                    ShoppingCartId = 1,
-                    Movie = movie,
-                   // MovieId = movie.MovieId,
-                    quantity = 1
-                };
-                //var abc = _mapper.Map<ShoppingCartItemViewModel, ShoppingCartItem>(efg);
 
-                _context.ShoppingCartItems.Add(shoppingCartItem);
-            }
-            else
-            {
-                shoppingCartItem.quantity++;
-            }
-            _context.SaveChanges();
+
+                    shoppingCartItem = new ShoppingCartItem()
+                    {
+                        ShoppingCartId = id,
+                        Movie = movie,
+                        quantity = 1
+                    };
+                   
+
+                    _context.ShoppingCartItems.Add(shoppingCartItem);
+                }
+                else
+                {
+                    shoppingCartItem.quantity++;
+                }
+                _context.SaveChanges();
+            
         }
 
 
-        public void RemoveItemFromCart(Movie movie)
+        public void RemoveItemFromCart(Movie movie, int ShoppingCartId)
         {
-            _shoppingCart.ShoppingCartId = 1;
-            var shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.MovieId == movie.MovieId && n.ShoppingCartId == _shoppingCart.ShoppingCartId);
+           
+
+           var id= _shoppingCart.ShoppingCartId = ShoppingCartId;
+            var shoppingCartItem = _context.ShoppingCartItems.FirstOrDefault(n => n.Movie.MovieId == movie.MovieId && n.ShoppingCartId == id);
 
             if (shoppingCartItem != null)
             {
@@ -73,21 +80,25 @@ namespace Asp.netcore_practice.Services
             _context.SaveChanges();
         }
 
-        public List<ShoppingCartItem> GetShoppingCartItems()
+        public List<ShoppingCartItem> GetShoppingCartItems(int shoppingCartId)
         {
-           var a= _shoppingCart.ShoppingCartId = 1;
-          /* var b= _shoppingCart.ShoppingCartItems ?? (*/
-           var b= _shoppingCart.ShoppingCartItems = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == a
-            /*_shoppingCart.ShoppingCartId*/).Include(n => n.Movie).ToList();
+           var a= _shoppingCart.ShoppingCartId = shoppingCartId;
+         
+            var b=  _context.ShoppingCartItems.Where(n => n.ShoppingCartId == a)
+           .Include(n => n.Movie).ToList();
             return b;
         }
 
-        public double ShoppingCartTotal()
+        public double ShoppingCartTotal(int shoppingCartId)
         {
-            var total = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == _shoppingCart.ShoppingCartId)
+           var id= _shoppingCart.ShoppingCartId = shoppingCartId;
+
+            var total = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == id)
                 .Select(n => n.Movie.Price * n.quantity).Sum();
 
-            return total;
+            
+
+                 return total;
         }
 
 
@@ -107,12 +118,13 @@ namespace Asp.netcore_practice.Services
         }
 
 
-        public void ClearShoppingCart()
+        public void ClearShoppingCart(int shoppingCartId)
         {
-           var cartId= _shoppingCart.ShoppingCartId = 1;
+           var cartId= _shoppingCart.ShoppingCartId = shoppingCartId;
 
             var items = _context.ShoppingCartItems.Where(n => n.ShoppingCartId == cartId).ToList();
             _context.ShoppingCartItems.RemoveRange(items);
+           
             _context.SaveChanges();
 
 

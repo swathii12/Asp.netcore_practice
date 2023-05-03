@@ -1,6 +1,7 @@
 ﻿using Asp.netcore_practice.Context;
 using Asp.netcore_practice.Models;
 using Asp.netcore_practice.ViewModels;
+using AutoMapper;
 
 namespace Asp.netcore_practice.Services
 {
@@ -8,23 +9,23 @@ namespace Asp.netcore_practice.Services
     {
 
             private readonly AppDbContext _context;
+            private readonly IMapper _mapper;
 
-            public CinemaService(AppDbContext context)
+            public CinemaService(AppDbContext context,IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
             public void AddCinema(CinemaViewModel cinema)
             {
-            var _cinema = new Cinema()
-            {
-                CinemaLogo = cinema.CinemaLogo,
-                CinemaName=cinema.CinemaName,
-                description=cinema.description
-
-
-
+                var _cinema = new Cinema()
+                {
+                    CinemaLogo = cinema.CinemaLogo,
+                    CinemaName=cinema.CinemaName,
+                    description=cinema.description
                 };
+
                 _context.Cinemas.Add(_cinema);
                 _context.SaveChanges();
             }
@@ -36,9 +37,9 @@ namespace Asp.netcore_practice.Services
                 _context.SaveChanges();
             }
 
-            public List<Cinema> GetAllCinemas()
+            public List<CinemaViewModel> GetAllCinemas()
             {
-                var cinemas = _context.Cinemas.ToList();
+                var cinemas = _context.Cinemas.Select(a=>_mapper.Map<Cinema,CinemaViewModel>(a)).ToList();
                 return cinemas;
             }
 
@@ -56,7 +57,7 @@ namespace Asp.netcore_practice.Services
                 return cinema;
             }
 
-        public Cinema Update(int id, CinemaViewModel cinema)
+        public CinemaViewModel Update(int id, CinemaViewModel cinema)
         {
             var _cinema = _context.Cinemas.FirstOrDefault(n => n.CinemaId == id);
             if (_cinema != null)
@@ -67,7 +68,9 @@ namespace Asp.netcore_practice.Services
 
                 _context.SaveChanges();
             }
-            return _cinema;
+
+            
+            return _mapper.Map<Cinema,CinemaViewModel>(_cinema) ;
         }  
         
     }

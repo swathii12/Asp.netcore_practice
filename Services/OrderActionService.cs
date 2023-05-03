@@ -23,27 +23,27 @@ namespace Asp.netcore_practice.Services
             _context = context;
         }
 
-        public void AddShoppingCart(ShoppingViewModel model)
+        public void AddShoppingCart()
         {
             var cart = new ShoppingCart()
             {
-                
+
             };
-            //var abc = _mapper.Map<ShoppingViewModel, ShoppingCart>(cart);
+            
 
             _context.ShoppingCart.Add(cart);
             _context.SaveChanges();
         }
 
-        public Movie AddToShoppingCart(int id)
+        public Movie AddToShoppingCart(AddMovieViewModel model)
         {
 
-            var item = _service.GetMovie(id);
-           // var abc = _mapper.Map<MovieGetByIdViewModel, Movie>(item);
+            var item = _service.GetMovie(model.MovieId);
+           
 
             if (item != null)
             {
-                _cartService.AddItem(item);
+                _cartService.AddItem(item,model.ShoppingCartId);
             }
 
             return item;
@@ -51,15 +51,15 @@ namespace Asp.netcore_practice.Services
 
 
 
-        public void RemoveFromShoppingCart(int id)
+        public void RemoveFromShoppingCart(AddMovieViewModel model)
         {
 
-            var item = _service.GetMovie(id);
+            var item = _service.GetMovie(model.MovieId);
            
 
             if (item != null)
             {
-                _cartService.RemoveItemFromCart(item);
+                _cartService.RemoveItemFromCart(item,model.ShoppingCartId);
             }
 
             
@@ -67,15 +67,20 @@ namespace Asp.netcore_practice.Services
 
 
 
-        public ShoppingCartViewModel ShoppingCart()
+        public ShoppingCartViewModel ShoppingCart(int shoppingCartId)
         {
-            var items = _cartService.GetShoppingCartItems();
-           // _shoppingCart.ShoppingCart.ShoppingCartItems = items;
+            var items = _cartService.GetShoppingCartItems(shoppingCartId);
+         
+            var cart = new ShoppingCart()
+            {
+                ShoppingCartId = shoppingCartId,
+                ShoppingCartItems = items
+            };
 
             var response = new ShoppingCartViewModel()
             {
-                ShoppingCart = _shoppingCart.ShoppingCart,
-                ShoppingCartTotal = _cartService.ShoppingCartTotal()
+                ShoppingCart = cart,
+                ShoppingCartTotal = _cartService.ShoppingCartTotal(shoppingCartId)
             };
 
             return response;

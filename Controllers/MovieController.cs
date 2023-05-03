@@ -1,11 +1,14 @@
 ﻿using Asp.netcore_practice.Services;
 using Asp.netcore_practice.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Asp.netcore_practice.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class MovieController : ControllerBase
     {
         private readonly IMovieService _service;
@@ -20,7 +23,7 @@ namespace Asp.netcore_practice.Controllers
         public IActionResult Add(MovieViewModel movie)
         {
             _service.Add(movie);
-            return Ok();
+            return Ok(movie);
         }
 
         [HttpPut("{id:int}")]
@@ -40,6 +43,7 @@ namespace Asp.netcore_practice.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var abc=_service.GetAll();
@@ -48,6 +52,7 @@ namespace Asp.netcore_practice.Controllers
         }
 
         [HttpGet("{id:int}")]
+        [AllowAnonymous]
         public IActionResult GetById(int id)
         {
             var content = _service.GetById(id);

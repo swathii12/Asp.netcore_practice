@@ -8,10 +8,10 @@ namespace Asp.netcore_practice.Services
         ActorGetByIdViewModel GetById(int id);
         void AddActor(ActorViewModel actor);
 
-        List<Actor> GetAllActors();
+        List<ActorViewModel> GetAllActors();
 
         void Delete(int id);
 
-        Actor Update(int id, ActorViewModel actor);
+        ActorViewModel Update(int id, ActorViewModel actor);
     }
 }

@@ -10,6 +10,7 @@ namespace Asp.netcore_practice.Models
         
         public int ShoppingCartId { get; set; }
         public List<ShoppingCartItem>? ShoppingCartItems { get; set; } = new List<ShoppingCartItem>();
+       
 
     }
 }

@@ -8,10 +8,10 @@ namespace Asp.netcore_practice.Services
         ProducerGetByIdViewModel GetById(int id);
         void AddProducer(ProducerViewModel producer);
 
-        List<Producer> GetAllProducers();
+        List<ProducerViewModel> GetAllProducers();
 
         void Delete(int id);
 
-        Producer Update(int id, ProducerViewModel producer);
+        ProducerViewModel Update(int id, ProducerViewModel producer);
     }
 }

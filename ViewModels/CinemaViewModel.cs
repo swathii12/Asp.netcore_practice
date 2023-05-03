@@ -8,7 +8,6 @@ namespace Asp.netcore_practice.ViewModels
         public string CinemaName { get; set; }
         public string description { get; set; }
 
-        //Relationships
-        //public List<Movie> Movies { get; set; } = new List<Movie>();
+       
     }
 }

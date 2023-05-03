@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Asp.netcore_practice
 {
     public class Program
@@ -8,12 +10,15 @@ namespace Asp.netcore_practice
                 CreateHostBuilder(args).Build().Run();
             }
 
-            public static IHostBuilder CreateHostBuilder(string[] args) =>
+             public static IHostBuilder CreateHostBuilder(string[] args) =>
                 Host.CreateDefaultBuilder(args)
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseStartup<Startup>();
+
+     
                     });
         
+
     }
 }

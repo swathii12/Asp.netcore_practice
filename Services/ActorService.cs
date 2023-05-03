@@ -1,23 +1,26 @@
 ﻿using Asp.netcore_practice.Context;
 using Asp.netcore_practice.Models;
 using Asp.netcore_practice.ViewModels;
+using AutoMapper;
 
 namespace Asp.netcore_practice.Services
 {
     public class ActorService : IActorService
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ActorService(AppDbContext context)
+        public ActorService(AppDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public void AddActor(ActorViewModel actor)
         {
             var _actor = new Actor()
             {
-               // ActorId = actor.ActorId,
+              
                 ProfilePictureUrl = actor.ProfilePictureUrl,
                 ActorName = actor.ActorName,
                 Bio = actor.Bio
@@ -35,9 +38,9 @@ namespace Asp.netcore_practice.Services
             _context.SaveChanges();
         }
 
-        public List<Actor> GetAllActors()
+        public List<ActorViewModel> GetAllActors()
         {
-            var actors = _context.Actor.ToList();
+            var actors = _context.Actor.Select(a=>_mapper.Map<Actor,ActorViewModel>(a)).ToList();
             return actors;
         }
 
@@ -55,7 +58,7 @@ namespace Asp.netcore_practice.Services
             return actor;
         }
 
-        public Actor Update(int id, ActorViewModel actor)
+        public ActorViewModel Update(int id, ActorViewModel actor)
         {
             var _actor = _context.Actor.FirstOrDefault(n => n.ActorId == id);
             if (_actor != null)
@@ -66,7 +69,7 @@ namespace Asp.netcore_practice.Services
 
                 _context.SaveChanges();
             }
-            return _actor;
+            return _mapper.Map<Actor,ActorViewModel>(_actor);
         }
     }
 }

@@ -15,13 +15,7 @@ namespace Asp.netcore_practice.ViewModels
 
         //Relationships
 
-
-
-
-
         public int CinemaId { get; set; }
-
-
 
         public int ProducerId{ get; set; }
 

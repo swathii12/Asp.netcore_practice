@@ -1,8 +1,8 @@
 ﻿namespace Asp.netcore_practice.ViewModels
 {
-    public class ShoppingCartItemViewModel
+    public class AddMovieViewModel
     {
+        public int ShoppingCartId { get; set; }
         public int MovieId { get; set; }
-        public int quantity { get; set; }
     }
 }

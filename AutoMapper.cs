@@ -1,6 +1,7 @@
 ﻿using Asp.netcore_practice.Models;
 using Asp.netcore_practice.ViewModels;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 
 namespace Asp.netcore_practice
 {
@@ -12,7 +13,13 @@ namespace Asp.netcore_practice
             CreateMap<Movie,MovieGetByIdViewModel>();
             CreateMap<ShoppingCartItem, ShoppingCartItemViewModel>();
             CreateMap<ShoppingCartItemViewModel, ShoppingCartItem>();
-            CreateMap<ShoppingViewModel, ShoppingCart>();
+            CreateMap<RoleViewModel, IdentityRole>();
+            CreateMap<Actor, ActorViewModel>();
+            CreateMap<Cinema, CinemaViewModel>();
+            CreateMap<Producer, ProducerViewModel>();
+            CreateMap<Movie, MovieViewModel>();
+
+
         }
     }
 }
